@@ -1,0 +1,3 @@
+/home/hekapoo/Documents/openglStuff/cmake_stuff/CMakeFiles/rebuild_cache.dir
+/home/hekapoo/Documents/openglStuff/cmake_stuff/CMakeFiles/edit_cache.dir
+/home/hekapoo/Documents/openglStuff/cmake_stuff/CMakeFiles/openGL_UI.dir
