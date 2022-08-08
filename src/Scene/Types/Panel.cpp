@@ -18,29 +18,36 @@ void Panel::setBackgroundColor(const glm::vec3 color)
 
 void Panel::setBounds(const Bounds& bounds)
 {
-    // lastBounds_ = bounds_;
     bounds_ = bounds;
 
     auto scaleX = bounds_.bottomRight.x - bounds_.topLeft.x;
     auto scaleY = bounds_.bottomRight.y - bounds_.topLeft.y;
 
-    quad_->setPos(glm::vec3(bounds_.topLeft, zIndex_));
+    quad_->setPos(glm::vec3(bounds_.topLeft, -zIndex_));
     quad_->setScale({ scaleX, scaleY });
 
     lastBounds_ = bounds_;
+
+    // make shader aware of the changes
+    shader_->setVec3f("bottomRight", glm::vec3(bounds_.bottomRight, 0));
+    shader_->setVec3f("topLeft", glm::vec3(bounds_.topLeft, 0));
+
+    // this should only be set once, not over and over
+    shader_->setInt("borderWidth", grabOffset_);
 
     // adjustElementsBounds();
 }
 
 void Panel::handleGrabFromPosition(const glm::vec2& pos)
 {
-    if (failedToGrabSide)
+    // no need to calculate something if we didnt pick anything
+    if (failedToGrabSide_)
         return;
 
     if (currentlyPickedSide_ == PickSide::OUT_OF_BOUNDS)
     {
         currentlyPickedSide_ = getPickedSide(pos); // should be called here, once
-        if (currentlyPickedSide_ == PickSide::OUT_OF_BOUNDS) failedToGrabSide = true;
+        if (currentlyPickedSide_ == PickSide::OUT_OF_BOUNDS) failedToGrabSide_ = true;
         boundsDiffBotRight_ = bounds_.bottomRight - pos;
         boundsDiffTopLeft_ = bounds_.topLeft - pos;
     }
@@ -64,7 +71,11 @@ void Panel::handleGrabFromPosition(const glm::vec2& pos)
             bounds_.bottomRight = { bounds_.bottomRight.x, pos.y + boundsDiffBotRight_.y };
             break;
         case PickSide::N:
-            bounds_.topLeft = { bounds_.topLeft.x, pos.y + boundsDiffTopLeft_.y };
+            // uncomment if u want to scale North
+            // bounds_.topLeft = { bounds_.topLeft.x, pos.y + boundsDiffTopLeft_.y };
+            bounds_.topLeft = { pos.x + boundsDiffTopLeft_.x, pos.y + boundsDiffTopLeft_.y };
+            bounds_.bottomRight = { pos.x + boundsDiffBotRight_.x, pos.y + boundsDiffBotRight_.y };
+
             break;
         case PickSide::S:
             bounds_.bottomRight = { bounds_.bottomRight.x, pos.y + boundsDiffBotRight_.y };
@@ -187,7 +198,7 @@ const Bounds Panel::constrainGrabBoundsFromSide(const Bounds& bounds, const Pick
 void Panel::resetGrabbing()
 {
     currentlyPickedSide_ = PickSide::OUT_OF_BOUNDS;
-    failedToGrabSide = false;
+    failedToGrabSide_ = false;
 }
 
 const Bounds& Panel::getBounds() {
@@ -218,12 +229,22 @@ void Panel::addElement(std::shared_ptr<ISceneElement> element) {
 }
 
 void Panel::removeElement(ISceneElement& element) {
-    // elements_.push_back(element);
+    //TODO
 }
 
 void Panel::setZIndex(int index)
 {
     zIndex_ = index;
+    quad_->setPos(glm::vec3(bounds_.topLeft, -zIndex_));
+}
+
+const int Panel::getZIndex() {
+    return zIndex_;
+}
+
+const std::string Panel::getName()
+{
+    return name_;
 }
 
 PickSide Panel::getPickedSide(const glm::vec2& pos) const
@@ -303,15 +324,17 @@ PickSide Panel::getPickedSide(const glm::vec2& pos) const
     return PickSide::OUT_OF_BOUNDS;
 }
 
-void Panel::render(const glm::mat4& projMat)
-{   // to be removed from here
-    shader_->setVec3f("bottomRight", glm::vec3(bounds_.bottomRight, 0));
-    shader_->setVec3f("topLeft", glm::vec3(bounds_.topLeft, 0));
-    shader_->setInt("borderWidth", grabOffset_);
+void Panel::update() {
+    if (Input::isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+        handleGrabFromPosition({ Input::getMouseX(), Input::getMouseY() });
 
+    if (Input::isMouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT))
+        resetGrabbing();
+}
+
+void Panel::render(const glm::mat4& projMat)
+{
     quad_->draw(projMat);
     for (const auto& element : elements_)
-    {
         element->render(projMat);
-    }
 }

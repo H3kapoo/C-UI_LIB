@@ -22,6 +22,10 @@ public:
     virtual void setBounds(const Bounds& bounds) = 0;
     virtual const Bounds& getBounds() = 0;
     virtual void render(const glm::mat4& projMat) = 0;
+    virtual void update() = 0;
+    virtual void setZIndex(int index) = 0;
+    virtual const int getZIndex() = 0;
+    virtual const std::string getName() = 0;
 };
 
 using ISceneElementPtr = std::shared_ptr<ISceneElement>;
