@@ -13,6 +13,14 @@ add_executable(${PROJECT_NAME}
     src/Buffers/Ibo.cpp
     src/Shaders/Shader.cpp
     src/Primitives/Quad.cpp
+    src/Scene/HekUIManager.cpp
+
+    src/Scene/Objects/Panel.cpp
+    src/Scene/Objects/Scene.cpp
+    src/Scene/Objects/SceneObjectBase.cpp
+    src/Scene/Utility/SceneInput.cpp
+    src/Scene/Utility/Bounds.cpp
+
     src/Scene/UIManager.cpp
     src/Scene/Types/ISceneElement.cpp
     src/Scene/Types/Panel.cpp

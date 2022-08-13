@@ -13,16 +13,31 @@ void main()
 {
     pixelColor = vec4(outColor, 1.0f);
 
-    if((gl_FragCoord.x >= bottomRight.x - borderWidth)
-       || (gl_FragCoord.x < topLeft.x + borderWidth - 1))
+    if(gl_FragCoord.y <= topLeft.y + borderWidth &&
+            gl_FragCoord.y >= topLeft.y - 1 &&
+            gl_FragCoord.x < bottomRight.x && gl_FragCoord.x > topLeft.x-1)
     {
-        pixelColor = vec4(vec3(0.5), 1);
+        pixelColor = vec4(outColor*0.5, 1.0f);
     }
 
-    if((gl_FragCoord.y < topLeft.y + borderWidth - 1)
-        || (gl_FragCoord.y >= bottomRight.y - borderWidth)
-        )
+    else if(gl_FragCoord.y >= bottomRight.y - borderWidth &&
+            gl_FragCoord.y <= bottomRight.y &&
+            gl_FragCoord.x < bottomRight.x&& gl_FragCoord.x > topLeft.x)
     {
-        pixelColor = vec4(vec3(0.5), 1);
+        pixelColor = vec4(outColor*0.5, 1.0f);
+    }
+
+    else if(gl_FragCoord.x <= topLeft.x + borderWidth  &&
+            gl_FragCoord.x >= topLeft.x - 1 &&
+            gl_FragCoord.y > topLeft.y && gl_FragCoord.y < bottomRight.y)
+    {
+        pixelColor = vec4(outColor*0.5, 1.0f);
+    }
+
+    else if(gl_FragCoord.x >= bottomRight.x - borderWidth &&
+            gl_FragCoord.x <= bottomRight.x &&
+            gl_FragCoord.y > topLeft.y && gl_FragCoord.y < bottomRight.y)
+    {
+        pixelColor = vec4(outColor*0.5, 1.0f);
     }
 }

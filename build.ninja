@@ -115,6 +115,42 @@ build CMakeFiles/openGL_UI.dir/src/Primitives/Quad.cpp.o: CXX_COMPILER__openGL_U
   OBJECT_DIR = CMakeFiles/openGL_UI.dir
   OBJECT_FILE_DIR = CMakeFiles/openGL_UI.dir/src/Primitives
 
+build CMakeFiles/openGL_UI.dir/src/Scene/HekUIManager.cpp.o: CXX_COMPILER__openGL_UI src/Scene/HekUIManager.cpp || cmake_object_order_depends_target_openGL_UI
+  DEP_FILE = CMakeFiles/openGL_UI.dir/src/Scene/HekUIManager.cpp.o.d
+  FLAGS = -std=gnu++2a
+  OBJECT_DIR = CMakeFiles/openGL_UI.dir
+  OBJECT_FILE_DIR = CMakeFiles/openGL_UI.dir/src/Scene
+
+build CMakeFiles/openGL_UI.dir/src/Scene/Objects/Panel.cpp.o: CXX_COMPILER__openGL_UI src/Scene/Objects/Panel.cpp || cmake_object_order_depends_target_openGL_UI
+  DEP_FILE = CMakeFiles/openGL_UI.dir/src/Scene/Objects/Panel.cpp.o.d
+  FLAGS = -std=gnu++2a
+  OBJECT_DIR = CMakeFiles/openGL_UI.dir
+  OBJECT_FILE_DIR = CMakeFiles/openGL_UI.dir/src/Scene/Objects
+
+build CMakeFiles/openGL_UI.dir/src/Scene/Objects/Scene.cpp.o: CXX_COMPILER__openGL_UI src/Scene/Objects/Scene.cpp || cmake_object_order_depends_target_openGL_UI
+  DEP_FILE = CMakeFiles/openGL_UI.dir/src/Scene/Objects/Scene.cpp.o.d
+  FLAGS = -std=gnu++2a
+  OBJECT_DIR = CMakeFiles/openGL_UI.dir
+  OBJECT_FILE_DIR = CMakeFiles/openGL_UI.dir/src/Scene/Objects
+
+build CMakeFiles/openGL_UI.dir/src/Scene/Objects/SceneObjectBase.cpp.o: CXX_COMPILER__openGL_UI src/Scene/Objects/SceneObjectBase.cpp || cmake_object_order_depends_target_openGL_UI
+  DEP_FILE = CMakeFiles/openGL_UI.dir/src/Scene/Objects/SceneObjectBase.cpp.o.d
+  FLAGS = -std=gnu++2a
+  OBJECT_DIR = CMakeFiles/openGL_UI.dir
+  OBJECT_FILE_DIR = CMakeFiles/openGL_UI.dir/src/Scene/Objects
+
+build CMakeFiles/openGL_UI.dir/src/Scene/Utility/SceneInput.cpp.o: CXX_COMPILER__openGL_UI src/Scene/Utility/SceneInput.cpp || cmake_object_order_depends_target_openGL_UI
+  DEP_FILE = CMakeFiles/openGL_UI.dir/src/Scene/Utility/SceneInput.cpp.o.d
+  FLAGS = -std=gnu++2a
+  OBJECT_DIR = CMakeFiles/openGL_UI.dir
+  OBJECT_FILE_DIR = CMakeFiles/openGL_UI.dir/src/Scene/Utility
+
+build CMakeFiles/openGL_UI.dir/src/Scene/Utility/Bounds.cpp.o: CXX_COMPILER__openGL_UI src/Scene/Utility/Bounds.cpp || cmake_object_order_depends_target_openGL_UI
+  DEP_FILE = CMakeFiles/openGL_UI.dir/src/Scene/Utility/Bounds.cpp.o.d
+  FLAGS = -std=gnu++2a
+  OBJECT_DIR = CMakeFiles/openGL_UI.dir
+  OBJECT_FILE_DIR = CMakeFiles/openGL_UI.dir/src/Scene/Utility
+
 build CMakeFiles/openGL_UI.dir/src/Scene/UIManager.cpp.o: CXX_COMPILER__openGL_UI src/Scene/UIManager.cpp || cmake_object_order_depends_target_openGL_UI
   DEP_FILE = CMakeFiles/openGL_UI.dir/src/Scene/UIManager.cpp.o.d
   FLAGS = -std=gnu++2a
@@ -141,7 +177,7 @@ build CMakeFiles/openGL_UI.dir/src/Scene/Types/Panel.cpp.o: CXX_COMPILER__openGL
 #############################################
 # Link the executable openGL_UI
 
-build openGL_UI: CXX_EXECUTABLE_LINKER__openGL_UI CMakeFiles/openGL_UI.dir/main.cpp.o CMakeFiles/openGL_UI.dir/src/Window/Window.cpp.o CMakeFiles/openGL_UI.dir/src/Window/Input.cpp.o CMakeFiles/openGL_UI.dir/src/Window/Time.cpp.o CMakeFiles/openGL_UI.dir/src/Buffers/Vao.cpp.o CMakeFiles/openGL_UI.dir/src/Buffers/Vbo.cpp.o CMakeFiles/openGL_UI.dir/src/Buffers/Ibo.cpp.o CMakeFiles/openGL_UI.dir/src/Shaders/Shader.cpp.o CMakeFiles/openGL_UI.dir/src/Primitives/Quad.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/UIManager.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/Types/ISceneElement.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/Types/Panel.cpp.o
+build openGL_UI: CXX_EXECUTABLE_LINKER__openGL_UI CMakeFiles/openGL_UI.dir/main.cpp.o CMakeFiles/openGL_UI.dir/src/Window/Window.cpp.o CMakeFiles/openGL_UI.dir/src/Window/Input.cpp.o CMakeFiles/openGL_UI.dir/src/Window/Time.cpp.o CMakeFiles/openGL_UI.dir/src/Buffers/Vao.cpp.o CMakeFiles/openGL_UI.dir/src/Buffers/Vbo.cpp.o CMakeFiles/openGL_UI.dir/src/Buffers/Ibo.cpp.o CMakeFiles/openGL_UI.dir/src/Shaders/Shader.cpp.o CMakeFiles/openGL_UI.dir/src/Primitives/Quad.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/HekUIManager.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/Objects/Panel.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/Objects/Scene.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/Objects/SceneObjectBase.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/Utility/SceneInput.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/Utility/Bounds.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/UIManager.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/Types/ISceneElement.cpp.o CMakeFiles/openGL_UI.dir/src/Scene/Types/Panel.cpp.o
   LINK_LIBRARIES = -lglfw3  -lGLEW  -lGL  -lGLU  -lX11  -lpthread  -ldl
   OBJECT_DIR = CMakeFiles/openGL_UI.dir
   POST_BUILD = :

@@ -1,6 +1,7 @@
 #include "Window.hpp"
 
 bool Window::inited = false;
+bool Window::windowDirty_ = false;
 
 Window::Window(const char* title) : Window(title, 840, 640) {}
 
@@ -16,6 +17,7 @@ Window::Window(const char* title, int width, int height) : width_(width), height
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glEnable(GL_DEPTH_TEST);
 
     windowHandle_ = glfwCreateWindow(width_, height_, title, nullptr, nullptr);
     if (windowHandle_ == nullptr)
@@ -26,6 +28,12 @@ Window::Window(const char* title, int width, int height) : width_(width), height
     }
 
     std::cout << "Successfully created window " << title << std::endl;
+
+    glfwSetFramebufferSizeCallback(windowHandle_,
+        [](GLFWwindow* window, int width, int height) {
+            Window::windowDirty_ = true;
+        });
+
     makeContextCurrent();
 }
 
@@ -34,8 +42,14 @@ void Window::makeContextCurrent() const
     glfwMakeContextCurrent(windowHandle_);
 }
 
-void Window::swapBuffers() const
+void Window::swapBuffers()
 {
+    if (Window::windowDirty_)
+    {
+        glfwGetFramebufferSize(windowHandle_, &width_, &height_);
+        glViewport(0, 0, width_, height_);
+        Window::windowDirty_ = false;
+    }
     glfwSwapBuffers(windowHandle_);
 }
 

@@ -14,6 +14,7 @@ class Window
 {
 private:
     static bool inited;
+    static bool windowDirty_;
     int width_, height_;
     GLFWwindow* windowHandle_ = nullptr; // no need for freeing, glfw does it automatically
 public:
@@ -24,7 +25,7 @@ public:
     void makeContextCurrent() const;
     bool shouldClose() const;
     void closeWindow() const;
-    void swapBuffers() const;
+    void swapBuffers();
     GLFWwindow* getHandle() const;
     int getWidth();
     int getHeight();

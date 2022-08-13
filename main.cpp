@@ -17,6 +17,11 @@
 #include "src/Scene/UIManager.hpp"
 #include "src/Scene/Types/Panel.hpp"
 
+// newer includes
+#include "src/Scene/HekUIManager.hpp"
+#include "src/Scene/Objects/Scene.hpp"
+#include "src/Scene/Objects/Panel.hpp"
+
 int main()
 {
     if (!Window::windowingInit())
@@ -29,23 +34,23 @@ int main()
         return -1;
 
     Input::setWindow(window);
-    Bounds testBounds{ { 200,200 }, { 400,400 } };
 
-    UIManagerPtr uiManager = std::make_shared<UIManager>(window);
-    PanelPtr panel = std::make_shared<Panel>("MyPanel", Bounds({ 100,100 }, { 200,200 }));
-    panel->setZIndex(2);
-    panel->setBounds(testBounds);
-    panel->setBackgroundColor(glm::vec3(1, 1, 1));
+    hekui::ScenePtr hekScene = std::make_shared<hekui::Scene>(window->getHandle());
 
-    PanelPtr panel2 = std::make_shared<Panel>("MyPanel2", Bounds({ 120,120 }, { 150,150 }));
-    panel2->setZIndex(1);
+    // setting up listeners for the scene
+    // this should be abstracted somehow somewhere else
+    Input::notifyMouseCursorPosEvent = hekScene->mouseCursorPosBinder();
+    // std::bind(&hekui::Scene::onMouseCursorPosEvent, hekScene, std::placeholders::_1, std::placeholders::_2);
+    Input::notifyMouseButtonEvent =
+        std::bind(&hekui::Scene::onMouseButtonEvent, hekScene, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    Input::notifyKeyboardEvent =
+        std::bind(&hekui::Scene::onKeyboardEvent, hekScene, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3,
+            std::placeholders::_4);
 
-    uiManager->addElement(panel);
-    uiManager->addElement(panel2);
 
-
-    glEnable(GL_DEPTH_TEST);
-    int zindex = 0;
+    hekui::PanelPtr hekPanel = std::make_shared<hekui::Panel>("MyPanel", hekui::Bounds({ 100,100 }, { 300,200 }));
+    hekPanel->setBackgroundColor(glm::vec3(1, 1, 1));
+    hekScene->addChild(hekPanel);
 
     while (!window->shouldClose())
     {
@@ -56,19 +61,8 @@ int main()
         if (Input::isKeyPressed(GLFW_KEY_ESCAPE))
             window->closeWindow();
 
-        if (Input::isKeyPressedOnce(GLFW_KEY_D))
-        {
-            panel->setZIndex(--zindex);
-        }
-
-        if (Input::isKeyPressedOnce(GLFW_KEY_A))
-        {
-            panel->setZIndex(++zindex);
-        }
-
-        // render the scene
-        uiManager->update();
-        uiManager->render();
+        hekScene->update();
+        hekScene->render();
 
         window->swapBuffers();
         Input::clear(); // must be called before pollEvs

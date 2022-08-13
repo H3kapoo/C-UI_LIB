@@ -2,6 +2,8 @@
 
 #include <memory>
 #include <cstring>
+#include <functional>
+
 #include "Window.hpp"
 
 class Input
@@ -74,6 +76,7 @@ public:
     }
 
     static bool isMouseDragging() { return isMouseDragging_; }
+
     static float getMouseDeltaX() { return mouseOffsetX; }
 
     static float getMouseDeltaY() { return mouseOffsetY; }
@@ -82,7 +85,14 @@ public:
 
     static float getMouseY() { return lastMouseY; }
 
+public:
+    //INIT THOSE LATER
+    static std::function<void(double xPos, double yPos)> notifyMouseCursorPosEvent;
+    static std::function<void(int button, int action, int mods)> notifyMouseButtonEvent;
+    static std::function<void(int key, int scancode, int action, int mods)> notifyKeyboardEvent;
+
 private:
+    //variables
     static bool oncePressedKeys[256];
     static bool currentlyPressedKeys[256];
     static bool previouslyPressedKeys[256];
@@ -104,6 +114,8 @@ private:
             previouslyPressedKeys[key] = true;
             oncePressedKeys[key] = false;
         }
+
+        notifyKeyboardEvent(key, scancode, action, mods);
     }
 
     static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -121,6 +133,7 @@ private:
 
             isMouseDragging_ = false; // hacky way for LEFT mouse dragg
         }
+        notifyMouseButtonEvent(button, action, mods);
     }
 
     static void mouseCallback(GLFWwindow* window, double xPos, double yPos)
@@ -132,6 +145,8 @@ private:
         mouseOffsetY = xPos - lastMouseY;
         lastMouseX = xPos;
         lastMouseY = yPos;
+
+        notifyMouseCursorPosEvent(xPos, yPos);
     }
 
 public:

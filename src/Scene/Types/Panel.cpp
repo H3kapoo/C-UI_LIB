@@ -224,7 +224,7 @@ void Panel::adjustElementsBounds()
     // }
 }
 
-void Panel::addElement(std::shared_ptr<ISceneElement> element) {
+void Panel::addElement(ISceneElementPtr element) {
     elements_.push_back(element);
 }
 
@@ -234,11 +234,12 @@ void Panel::removeElement(ISceneElement& element) {
 
 void Panel::setZIndex(int index)
 {
-    zIndex_ = index;
+    zIndex_ = index < 0 ? 0 : index;
+
     quad_->setPos(glm::vec3(bounds_.topLeft, -zIndex_));
 }
 
-const int Panel::getZIndex() {
+const int Panel::getZIndex() const {
     return zIndex_;
 }
 
@@ -252,89 +253,72 @@ PickSide Panel::getPickedSide(const glm::vec2& pos) const
     if (currentlyPickedSide_ != PickSide::OUT_OF_BOUNDS)
         return currentlyPickedSide_;
 
+    // these lambdas should be removed from here in some utility package
     const auto isOnTopRegion = [&]() {
         return (pos.y <= bounds_.topLeft.y + grabOffset_ &&
-            pos.y >= bounds_.topLeft.y);
+            pos.y >= bounds_.topLeft.y &&
+            pos.x < bounds_.bottomRight.x&& pos.x > bounds_.topLeft.x);
     };
 
     const auto isOnBotRegion = [&]() {
         return (pos.y >= bounds_.bottomRight.y - grabOffset_ &&
-            pos.y <= bounds_.bottomRight.y);
+            pos.y <= bounds_.bottomRight.y &&
+            pos.x < bounds_.bottomRight.x&& pos.x > bounds_.topLeft.x);
     };
 
     const auto isOnLeftRegion = [&]() {
         return (pos.x <= bounds_.topLeft.x + grabOffset_ &&
-            pos.x >= bounds_.topLeft.x);
+            pos.x >= bounds_.topLeft.x &&
+            pos.y > bounds_.topLeft.y && pos.y < bounds_.bottomRight.y);
     };
 
     const auto isOnRightRegion = [&]() {
         return (pos.x >= bounds_.bottomRight.x - grabOffset_ &&
-            pos.x <= bounds_.bottomRight.x);
+            pos.x <= bounds_.bottomRight.x &&
+            pos.y > bounds_.topLeft.y && pos.y < bounds_.bottomRight.y);
     };
 
 
     if (isOnRightRegion() && isOnTopRegion())
-    {
-        std::cout << "NE" << std::endl;
         return PickSide::NE;
-    }
 
     if (isOnRightRegion() && isOnBotRegion())
-    {
-        std::cout << "SE" << std::endl;
         return PickSide::SE;
-    }
 
     if (isOnLeftRegion() && isOnTopRegion())
-    {
-        std::cout << "NW" << std::endl;
         return PickSide::NW;
-    }
 
     if (isOnLeftRegion() && isOnBotRegion())
-    {
-        std::cout << "SW" << std::endl;
         return PickSide::SW;
-    }
 
     if (isOnTopRegion())
-    {
-        std::cout << "N" << std::endl;
         return PickSide::N;
-    }
 
     if (isOnBotRegion())
-    {
-        std::cout << "S" << std::endl;
         return PickSide::S;
-    }
 
     if (isOnLeftRegion())
-    {
-        std::cout << "W" << std::endl;
         return PickSide::W;
-    }
 
     if (isOnRightRegion())
-    {
-        std::cout << "E" << std::endl;
         return PickSide::E;
-    }
 
     return PickSide::OUT_OF_BOUNDS;
 }
 
-void Panel::update() {
+// void Panel::setParent(ISceneElementPtr parent)
+// {
+//     parent_ = parent;
+// }
+
+void Panel::updateAndRender(const glm::mat4& projMat) {
     if (Input::isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
         handleGrabFromPosition({ Input::getMouseX(), Input::getMouseY() });
 
     if (Input::isMouseButtonReleased(GLFW_MOUSE_BUTTON_LEFT))
         resetGrabbing();
-}
 
-void Panel::render(const glm::mat4& projMat)
-{
     quad_->draw(projMat);
     for (const auto& element : elements_)
-        element->render(projMat);
+        element->updateAndRender(projMat);
 }
